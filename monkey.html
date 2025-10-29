@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fruit Box Delight - Payment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="ACE.css">
+  <style>
+    main { max-width: 500px; margin: 2rem auto; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Fruit Box Delight</h1>
+    <nav>
+      <a href="luffy.html">Home</a>
+      <a href="monkey.html">Payment</a>
+      <a href="dragon.html">Service</a>
+      <a href="royser.html">Location</a>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Payment</h2>
+      <form id="paymentForm">
+        <label>Name: <input type="text" required></label>
+        <label>Email: <input type="email" required></label>
+        <label>Address: <textarea required></textarea></label>
+        <label>Choose Box Size:
+          <select required>
+            <option value="">Select</option>
+            <option>Normal Fruit Box</option>
+            <option>Prime Fruit Box</option>
+          </select>
+        </label>
+        <label>Payment Method:
+          <select required>
+            <option value="">Select</option>
+            <option>Credit Card</option>
+            <option>UPI</option>
+            <option>Cash on Delivery</option>
+          </select>
+        </label>
+        <button type="submit">Pay & Order</button>
+      </form>
+    </section>
+  </main>
+  <script>
+    document.getElementById('paymentForm').onsubmit = function(e) {
+      e.preventDefault();
+      window.location.href = "royser.html";
+    };
+  </script>
+</body>
+</html>
+

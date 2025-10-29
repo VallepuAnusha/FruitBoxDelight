@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fruit Box Delight - Location</title>
+  <link rel="stylesheet" href="ACE.css">
+  <style>
+    #map {
+      height: 80vh;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    header nav a.active {
+      background-color: #238636;
+      color: #fff;
+      border-radius: 4px;
+      padding: 5px 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Fruit Box Delight</h1>
+    <nav>
+      <a href="luffy.html">Home</a>
+      <a href="monkey.html">Payment</a>
+      <a href="dragon.html">Service</a>
+      <a href="royser.html" class="active">Location</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>🌍 Live Location Tracker</h2>
+    <div id="map"></div>
+  </main>
+
+  <!-- Socket.IO -->
+  <script src="/socket.io/socket.io.js"></script>
+
+  <!-- Leaflet.js CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script>
+    const socket = io();
+
+    let map, userMarker;
+    const otherUsersMarkers = {};
+
+    function initMap(lat = 20, lng = 77, zoom = 5) {
+      map = L.map('map').setView([lat, lng], zoom);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+    }
+
+    // Initialize map at default location first
+    initMap();
+
+    // Get current user location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        map.setView([lat, lng], 15);
+
+        userMarker = L.marker([lat, lng]).addTo(map).bindPopup("You").openPopup();
+        // Send initial location to server
+        socket.emit('updateLocation', {latitude: lat, longitude: lng});
+
+        // Update location every 3 seconds
+        setInterval(() => {
+          navigator.geolocation.getCurrentPosition(p => {
+            const la = p.coords.latitude;
+            const lo = p.coords.longitude;
+            userMarker.setLatLng([la, lo]);
+            map.setView([la, lo], map.getZoom());
+            socket.emit('updateLocation', {latitude: la, longitude: lo});
+          }, err => console.error(err), {enableHighAccuracy:true});
+        }, 3000);
+
+      }, err => alert("Enable GPS & allow location."), {enableHighAccuracy:true});
+    } else alert("Geolocation not supported");
+
+    // Listen to other users
+    socket.on('userLocation', data => {
+      if (!otherUsersMarkers[data.id]) {
+        const m = L.marker([data.latitude, data.longitude], {title: data.id}).addTo(map);
+        otherUsersMarkers[data.id] = m;
+      } else {
+        otherUsersMarkers[data.id].setLatLng([data.latitude, data.longitude]);
+      }
+    });
+
+    // Remove disconnected users
+    socket.on('removeUser', id => {
+      if (otherUsersMarkers[id]) {
+        map.removeLayer(otherUsersMarkers[id]);
+        delete otherUsersMarkers[id];
+      }
+    });
+  </script>
+</body>
+</html>
+

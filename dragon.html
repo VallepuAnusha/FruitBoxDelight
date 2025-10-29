@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fruit Box Delight - Service</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="ACE.css">
+</head>
+<body>
+  <header>
+    <h1>Fruit Box Delight</h1>
+    <nav>
+     <a href="luffy.html">Home</a>
+      <a href="monkey.html">Payment</a>
+      <a href="dragon.html"class="active">Service</a>
+      <a href="royser.html">Location</a>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Our Service</h2>
+      <p>
+        At <strong>Fruit Box Delight</strong>, we deliver fresh, delicious fruit pieces in a convenient 6-division box.
+        You can pick your own fruits or choose our curated combos. We guarantee hygiene, freshness, and quick delivery!
+      </p>
+      <ul>
+        <li>Perfectly portioned fruit pieces</li>
+        <li>Customizable fruit selection</li>
+        <li>Great for gifts & parties</li>
+        <li>Fast delivery in eco-friendly packaging</li>
+      </ul>
+      <div class="fruit-box">
+        <div class="division">Apple</div>
+        <div class="division">Banana</div>
+        <div class="division">Grapes</div>
+        <div class="division">Orange</div>
+        <div class="division">Pineapple</div>
+        <div class="division">Kiwi</div>
+      </div>
+    </section>
+  </main>
+  <script src="script.js">
+    // Highlight the active nav link based on the current page
+document.addEventListener('DOMContentLoaded', function () {
+  const path = window.location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('nav a').forEach(link => {
+    const linkPath = link.getAttribute('href');
+    if (linkPath === path) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+});
+  </script>
+</body>
+</html>
+

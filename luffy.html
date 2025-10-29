@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fruit Box Delight - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="ACE.css">
+</head>
+<body>
+  <header>
+    <h1>Fruit Box Delight</h1>
+    <nav>
+      <a href="luffy.html">Home</a>
+      <a href="monkey.html">Payment</a>
+      <a href="dragon.html">Service</a>
+      <a href="royser.html">Location</a>
+    </nav>
+  </header>
+  <main>
+    <h2>Welcome to Fruit <br>Box Delight!</h2>
+    <style>
+      h2{
+        font-size: 30px;
+        text-align: center;
+        font-weight: bolder;
+      }
+    </style>
+    <div style="display: flex; justify-content: center; gap: 2rem; margin: 6vh 0;">
+      <button class="choice-btn" id="theirChoiceBtn">Normal fruit box</button>
+      <button class="choice-btn" id="yourChoiceBtn">Primem fruit box</button>
+    </div>
+    <!-- Their Choice Circle -->
+    <div id="theirBoxSection" style="display:none; flex-direction:column; align-items:center;">
+      <div class="circle-fruit-box-6">
+        <div class="fruit-segment-6" style="--i:0;"><img src="apple.png" alt="Apple"><span>Apple</span></div>
+        <div class="fruit-segment-6" style="--i:1;"><img src="banana.png" alt="Banana"><span>Banana</span></div>
+        <div class="fruit-segment-6" style="--i:2;"><img src="grapes.png" alt="Grapes"><span>Grapes</span></div>
+        <div class="fruit-segment-6" style="--i:3;"><img src="orange.png" alt="Orange"><span>Orange</span></div>
+        <div class="fruit-segment-6" style="--i:4;"><img src="pineapple.png" alt="Pineapple"><span>Pineapple</span></div>
+        <div class="fruit-segment-6" style="--i:5;"><img src="kiwi.png" alt="Kiwi"><span>Kiwi</span></div>
+      </div>
+      <button class="choice-btn" id="orderBtn" style="margin-top:2rem;">Order</button>
+    </div>
+    <!-- Your Choice Section -->
+    <div id="yourBoxSection" style="display:none;">
+      <div class="your-choice-flex-row">
+        <!-- Fruit List (row) with arrows -->
+        <div class="fruit-list-row-container">
+          <button class="arrow-btn" id="leftArrow" aria-label="Scroll left">&#8592;</button>
+          <div class="fruit-list-row" id="fruitListRow">
+            <!-- Populated by JS -->
+          </div>
+          <button class="arrow-btn" id="rightArrow" aria-label="Scroll right">&#8594;</button>
+        </div>
+        <!-- 6-segment Circle -->
+        <div>
+          <div class="circle-fruit-box-6" id="yourFruitCircle6">
+            <!-- 6 slots -->
+          </div>
+          <div class="order-btn-container">
+            <!-- Their Choice Order button -->
+            <button class="choice-btn order-btn-their" id="orderBtn" style="margin-top:2rem;">Order</button>
+            <!-- Your Choice Order button -->
+            <button class="choice-btn order-btn-your" id="orderBtnYour6" style="display:none;">Order</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal for Order Confirmation -->
+  <div class="modal-backdrop" id="orderModalBackdrop" style="display:none;">
+    <div class="modal-box">
+      <div id="modalBoxTitle" style="font-weight:bold;font-size:1.1em;text-align:center;margin-bottom:10px;"></div>
+      <ul class="modal-fruits-list" id="modalFruits" style="margin-bottom:8px;list-style:none;padding:0;"></ul>
+      <div class="modal-price" id="modalPrice" style="text-align:center;margin-bottom:10px;"></div>
+      <div class="modal-actions" style="display:flex;gap:20px;justify-content:center;">
+        <button class="modal-btn ok" id="modalOkBtn" style="background:#238636;color:#fff;padding:8px 20px;border-radius:6px;border:none;font-size:1em;cursor:pointer;">OK</button>
+        <button class="modal-btn cancel" id="modalCancelBtn" style="background:#ddd;color:#333;padding:8px 20px;border-radius:6px;border:none;font-size:1em;cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fruit data with prices
+    const fruits = [
+      {key: "apple", name: "Apple", img: "apple.png", price: 10},
+      {key: "banana", name: "Banana", img: "banana.png", price: 30},
+      {key: "grapes", name: "Grapes", img: "grapes.png", price: 50},
+      {key: "orange", name: "Orange", img: "orange.png", price: 35},
+      {key: "pineapple", name: "Pineapple", img: "pineapple.png", price: 60},
+      {key: "kiwi", name: "Kiwi", img: "kiwi.png", price: 55},
+      {key: "mango", name: "Mango", img: "mango.jpg", price: 70},
+      {key: "strawberry", name: "Strawberry", img: "strawberry.jpg", price: 80},
+      {key: "watermelon", name: "Watermelon", img: "watermelon.jpg", price: 90},
+      {key: "papaya", name: "Papaya", img: "papaya.jpg", price: 45},
+      {key: "blueberry", name: "Blueberry", img: "blueberry.jpg", price: 100},
+      {key: "pear", name: "Pear", img: "pear.jpg", price: 40},
+      {key: "peach", name: "Peach", img: "peach.jpg", price: 50},
+      {key: "plum", name: "Plum", img: "plum.jpg", price: 45},
+      {key: "pomegranate", name: "Pomegranate", img: "pomegranate.jpg", price: 80},
+      {key: "cherry", name: "Cherry", img: "cherry.jpg", price: 90},
+      {key: "lychee", name: "Lychee", img: "lychee.jpg", price: 85},
+      {key: "dragonfruit", name: "Dragonfruit", img: "dragonfruit.jpg", price: 120},
+      {key: "guava", name: "Guava", img: "guava.jpg", price: 35},
+      {key: "jackfruit", name: "Jackfruit", img: "jackfruit.jpg", price: 75}
+    ];
+
+    // Show/hide logic for sections
+    document.getElementById('theirChoiceBtn').addEventListener('click', function() {
+      document.getElementById('theirBoxSection').style.display = 'flex';
+      document.getElementById('yourBoxSection').style.display = 'none';
+    });
+    document.getElementById('yourChoiceBtn').addEventListener('click', function() {
+      document.getElementById('yourBoxSection').style.display = 'block';
+      document.getElementById('theirBoxSection').style.display = 'none';
+    });
+
+    // Build fruit list (row)
+    const fruitListRowElem = document.getElementById('fruitListRow');
+    let chosenFruits6 = [];
+    function renderFruitList6() {
+      fruitListRowElem.innerHTML = '';
+      fruits.forEach(fruit => {
+        const li = document.createElement('div');
+        li.className = 'fruit-list-item';
+        li.innerHTML = `<img src="${fruit.img}" alt="${fruit.name}"><span>${fruit.name}</span>`;
+        if (chosenFruits6.includes(fruit.key)) {
+          li.classList.add('disabled');
+        }
+        li.addEventListener('click', function() {
+          if (chosenFruits6.length < 6 && !chosenFruits6.includes(fruit.key)) {
+            chosenFruits6.push(fruit.key);
+            renderFruitList6();
+            renderFruitCircle6();
+          }
+        });
+        fruitListRowElem.appendChild(li);
+      });
+    }
+
+    // Build the 6-slot circle (right)
+    const fruitDataMap = Object.fromEntries(fruits.map(f => [f.key, f]));
+    function renderFruitCircle6() {
+      const circle = document.getElementById('yourFruitCircle6');
+      circle.innerHTML = '';
+      for (let i = 0; i < 6; i++) {
+        const fruitKey = chosenFruits6[i];
+        const div = document.createElement('div');
+        div.className = 'fruit-segment-6';
+        div.style.setProperty('--i', i);
+        if (fruitKey) {
+          const fruit = fruitDataMap[fruitKey];
+          div.innerHTML = `
+            <img src="${fruit.img}" alt="${fruit.name}" title="Click to remove">
+            <span>${fruit.name}</span>
+          `;
+          // Click to remove this fruit
+          div.querySelector('img').style.cursor = "pointer";
+          div.querySelector('img').addEventListener('click', function() {
+            chosenFruits6.splice(i, 1);
+            renderFruitList6();
+            renderFruitCircle6();
+          });
+        } else {
+          div.innerHTML = `<div class="empty-fruit"></div>`;
+        }
+        circle.appendChild(div);
+      }
+      document.getElementById('orderBtnYour6').style.display = (chosenFruits6.length === 6) ? 'inline-block' : 'none';
+    }
+
+    renderFruitList6();
+    renderFruitCircle6();
+
+    // Arrow scroll logic
+    document.getElementById('leftArrow').onclick = function() {
+      document.getElementById('fruitListRow').scrollBy({ left: -150, behavior: 'smooth' });
+    };
+    document.getElementById('rightArrow').onclick = function() {
+      document.getElementById('fruitListRow').scrollBy({ left: 150, behavior: 'smooth' });
+    };
+
+    // Active nav link JS (optional)
+    const path = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('nav a').forEach(link => {
+      const linkPath = link.getAttribute('href');
+      if (linkPath === path) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+
+    // ----- Modal logic -----
+    function showOrderModal(boxType, fruitsArr, price, isPrime) {
+      document.getElementById('orderModalBackdrop').style.display = 'flex';
+      document.getElementById('modalBoxTitle').textContent = boxType;
+      if(isPrime) {
+        document.getElementById('modalFruits').innerHTML = fruitsArr.map(f =>
+          `<li style="display:flex;align-items:center;margin-bottom:8px;">
+            <img src="${f.img}" alt="${f.name}" style="width:32px;height:32px;border-radius:6px;margin-right:10px;">
+            <span>${f.name}</span>
+          </li>`
+        ).join('');
+        const totalPrice = fruitsArr.reduce((sum, fruit) => sum + fruit.price, 0);
+        document.getElementById('modalPrice').textContent = `Total Price: ₹${totalPrice}`;
+        window._orderModalData = {boxType, fruitsArr, price: totalPrice};
+      } else {
+        document.getElementById('modalFruits').innerHTML = fruitsArr.map(f =>
+          `<li style="display:flex;align-items:center;margin-bottom:8px;">
+            <img src="${f.img}" alt="${f.name}" style="width:32px;height:32px;border-radius:6px;margin-right:10px;">
+            <span>${f.name}</span>
+          </li>`
+        ).join('');
+        document.getElementById('modalPrice').textContent = `Price: ₹${price}`;
+        window._orderModalData = {boxType, fruitsArr, price};
+      }
+    }
+    function hideOrderModal() {
+      document.getElementById('orderModalBackdrop').style.display = 'none';
+      window._orderModalData = null;
+    }
+    document.getElementById('modalOkBtn').onclick = function() {
+      const d = window._orderModalData;
+      if (d) {
+        window.location.href = `monkey.html?box=${encodeURIComponent(d.boxType)}&fruits=${encodeURIComponent(JSON.stringify(d.fruitsArr))}&price=${encodeURIComponent(d.price)}`;
+      }
+    };
+    document.getElementById('modalCancelBtn').onclick = hideOrderModal;
+    document.getElementById('orderModalBackdrop').onclick = function(e) {
+      if (e.target === this) hideOrderModal();
+    };
+
+    // Updated order button logic
+    // For Normal Fruit Box
+    document.querySelectorAll('#orderBtn').forEach(btn => {
+      btn.onclick = function() {
+        showOrderModal(
+          "Normal Fruit Box",
+          [
+            {name:"Apple", img:"apple.png"},
+            {name:"Banana", img:"banana.png"},
+            {name:"Grapes", img:"grapes.png"},
+            {name:"Orange", img:"orange.png"},
+            {name:"Pineapple", img:"pineapple.png"},
+            {name:"Kiwi", img:"kiwi.png"}
+          ],
+          199,
+          false
+        );
+      };
+    });
+    // For Prime Fruit Box (custom)
+    document.getElementById('orderBtnYour6').onclick = function() {
+      if (chosenFruits6.length === 6) {
+        showOrderModal(
+          "Primem Fruit Box",
+          chosenFruits6.map(k => fruitDataMap[k]),
+          0,
+          true
+        );
+      }
+    };
+  </script>
+
+</body>
+</html>
