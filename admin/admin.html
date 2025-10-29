@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Fruit Box Delight</title>
+  <link rel="stylesheet" href="admin.css">
+  <style>
+    body { font-family: Arial, sans-serif; display:flex; justify-content:center; align-items:center; height:100vh; margin:0; background:#f7f7f7; }
+    #loginBox { background:#fff; padding:2rem; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.2); text-align:center; }
+    #loginBox input { width:100%; padding:0.5rem; margin:0.5rem 0; }
+    #loginBox button { padding:0.5rem 1rem; background:#238636; color:#fff; border:none; border-radius:5px; cursor:pointer; }
+    #adminContent { display:none; }
+  </style>
+</head>
+<body>
+
+<div id="loginBox">
+  <h2>Admin Login</h2>
+  <input type="password" id="adminPassword" placeholder="Enter password">
+  <button id="loginBtn">Login</button>
+  <p id="errorMsg" style="color:red; display:none;">Incorrect password!</p>
+</div>
+
+<div id="adminContent">
+  <h1>Welcome, Admin!</h1>
+  <p>Here you can manage orders, view locations, etc.</p>
+  <!-- Add admin tools here -->
+</div>
+
+<script>
+  const password = "Fruit123"; // CHANGE this to your secret password
+  const loginBtn = document.getElementById("loginBtn");
+  const adminPasswordInput = document.getElementById("adminPassword");
+  const errorMsg = document.getElementById("errorMsg");
+  const loginBox = document.getElementById("loginBox");
+  const adminContent = document.getElementById("adminContent");
+
+  loginBtn.addEventListener("click", function() {
+    const entered = adminPasswordInput.value;
+    if (entered === password) {
+      loginBox.style.display = "none";
+      adminContent.style.display = "block";
+    } else {
+      errorMsg.style.display = "block";
+    }
+  });
+
+  // Optional: press Enter to login
+  adminPasswordInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") loginBtn.click();
+  });
+</script>
+
+</body>
+</html>
