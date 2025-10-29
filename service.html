@@ -41,20 +41,22 @@
       </div>
     </section>
   </main>
-  <script src="script.js">
-    // Highlight the active nav link based on the current page
-document.addEventListener('DOMContentLoaded', function () {
-  const path = window.location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('nav a').forEach(link => {
-    const linkPath = link.getAttribute('href');
-    if (linkPath === path) {
-      link.classList.add('active');
-    } else {
-      link.classList.remove('active');
-    }
+ <script src="script.js"></script>
+<script>
+  // Highlight active nav link
+  document.addEventListener('DOMContentLoaded', function () {
+    const path = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('nav a').forEach(link => {
+      const linkPath = link.getAttribute('href');
+      if (linkPath === path) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
   });
-});
-  </script>
+</script>
+
 </body>
 </html>
 

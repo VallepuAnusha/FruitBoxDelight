@@ -225,7 +225,8 @@
     document.getElementById('modalOkBtn').onclick = function() {
       const d = window._orderModalData;
       if (d) {
-        window.location.href = `monkey.html?box=${encodeURIComponent(d.boxType)}&fruits=${encodeURIComponent(JSON.stringify(d.fruitsArr))}&price=${encodeURIComponent(d.price)}`;
+        window.location.href = `payment.html?box=${encodeURIComponent(d.boxType)}&fruits=${encodeURIComponent(JSON.stringify(d.fruitsArr))}&price=${encodeURIComponent(d.price)}`;
+
       }
     };
     document.getElementById('modalCancelBtn').onclick = hideOrderModal;
